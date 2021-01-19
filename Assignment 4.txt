@@ -1,0 +1,45 @@
+1	module full_adder (Sum, Carry_out, Addend, Augend, Carry_in);
+     2	output Sum;
+     3	output Carry_out;
+     4	input Addend,Augend;
+     5	input Carry_in;
+     6	wire w1,w2,w3;
+     7	xor (w1,Addend,Augend);
+     8	xor (Sum,w1,Carry_in);
+     9	and (w2,Addend,Augend);
+    10	and (w3,Carry_in,w1);
+    11	or (Carry_out,w2,w3);
+    12	endmodule
+    13	module binary_adder(Sum, Carry_out, Addend, Augend, Carry_in);
+    14	output[3:0] Sum;
+    15	output Carry_out;
+    16	input[3:0] Addend,Augend;
+    17	input Carry_in;
+    18	wire w1,w2,w3;
+    19	full_adder FA0 (Sum[0],w1,Addend[0],Augend[0],Carry_in);
+    20	full_adder FA1 (Sum[1],w2,Addend[1],Augend[1],w1);
+    21	full_adder FA2 (Sum[2],w3,Addend[2],Augend[2],w2);
+    22	full_adder FA3 (Sum[3],Carry_out,Addend[3],Augend[3],w3);
+    23	endmodule
+    24	module BCD_Adder(Sum, Carry_out, Addend, Augend, Carry_in);
+    25	output[3:0] Sum;
+    26	output Carry_out;
+    27	input[3:0] Addend,Augend;
+    28	input Carry_in;
+    29	wire w1,w2,w3,w4,w5,w6,w7;
+    30	wire[3:0] Z;
+    31	and (w4,Z[2],Z[3]);
+    32	and (w5,Z[1],Z[3]);
+    33	or (Carry_out,w4,w5,w6);
+    34	wire[3:0] X;
+    35	assign X[0] = 0;
+    36	assign X[1] = Carry_out;
+    37	assign X[2] = Carry_out;
+    38	assign X[3] = 0;
+    39	wire W;
+    40	assign W =0;
+    41	wire Y;
+    42	assign Y =0;
+    43	binary_adder B_1(Z,w6,Addend,Augend,Carry_in);
+    44	binary_adder B_2(Sum,W,X,Z,Y);
+    45	endmodule

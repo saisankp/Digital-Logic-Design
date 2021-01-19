@@ -1,0 +1,18 @@
+	 1	module OddFunction (A, x, y, clk, reset_b);
+     2	output A;
+     3	input x;
+     4	input y;
+     5	input clk;
+     6	input reset_b;
+     7	reg state;
+     8	
+     9	parameter S0 = 1'b0, S1 = 1'b1;
+    10	
+    11	always @ (posedge clk, negedge reset_b)
+    12	if(reset_b == 0) state <= S0;
+    13	else case(state)
+    14	S0: if((x == 1 && y == 0) || (x == 0 && y == 1)) state <= S1; else state <= S0;
+    15	S1: if((x == 0 && y == 1) || (x == 1 && y == 0)) state <= S0; else state <= S1;
+    16	endcase
+    17	assign A = state;
+    18	endmodule

@@ -1,0 +1,34 @@
+	 1	module StateDiagram (output reg y_out, input x_in, clk, reset_b);
+     2		reg [2:0] state, next_state;
+     3		parameter S0 = 3'b000, S1 = 3'b001, S2 = 3'b010, S3 = 3'b011, S4 = 3'b100, S5 = 3'b101;
+     4		
+     5			always @(posedge clk, negedge reset_b)
+     6			begin 	
+     7					if(reset_b == 0)
+     8						state <= S0;
+     9					else
+    10						state <= next_state;
+    11						
+    12			end
+    13			
+    14			always @(state, x_in, y_out)
+    15			begin
+    16			case(state)
+    17				S0: if(x_in == 1'b1) next_state <= S1;else next_state <= S0;
+    18				S1: next_state <= S2;
+    19				S2: next_state <= S3;
+    20				S3: next_state <= S4;
+    21				S4: next_state <= S5;
+    22				S5: next_state <= S0;
+    23			endcase
+    24			
+    25			if(state == S1 || state == S2 || state == S3)
+    26				begin
+    27				y_out = 1'b1;
+    28				end
+    29			else if(state == S4 || state == S5 || state == S0)
+    30				begin
+    31				y_out = 1'b0;
+    32				end
+    33			end
+    34		endmodule
